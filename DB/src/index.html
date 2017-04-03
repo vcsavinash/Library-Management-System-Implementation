@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<title>Search Books</title>
+	<link rel="stylesheet" href="index.css" type="text/css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+	<meta charset="utf-8">
+	<link href="avinash.jpg" rel="shortcut icon" />
+	<meta name="description" content="UTD Library " />
+	<meta name="keywords" content="Avinash Chandrasekharan, Library, UTD"/>
+</head>
+<body class="main">
+	<div id="top" class="header">
+		<img src="library.jpg" alt="library" class="image1"/>
+	  	<a class="imp" href="#search">Search</a>
+	  	<a class="imp" href="#checkout">Check Out</a>
+	  	<a class="imp" href="#checkin">Check In</a>
+	  	<a class="imp" href="#register">Register</a>
+	  	<a class="imp" href="#fines">Fines</a>
+	</div>
+	<h1 id="search">WELCOME TO UTD LIBRARY</h1>
+	<h2 id="search">Search Books</h2>
+	<form class="search1">
+	<table class="search">
+			<tr>
+				<td><label for="search">Search:</label></td>
+				<td><input type="text" name="search" id="search1"></td>
+			</tr>
+	</table>
+		<br><br>
+		<button type="button" id="submit" value="Submit">Search</button>
+		<br><br>
+		<div class="results" id="results">
+		</div>
+	<br>
+	</form>
+	<h2 id="checkout">Check out Books</h2>
+	<form class="checkout">
+		<table class="search">
+			<tr>
+				<td><label for="checkoutisbn">ISBN:</label></td>
+				<td><input type="text" name="checkoutisbn" id="checkoutisbn"></td>
+			</tr>
+			<tr>
+				<td><label for="borrowercardno">Borrower Card No.:</label></td>
+				<td><input type="text" name="borrowercardno" id="borrowercardno"></td>
+			</tr>
+		</table>
+		<br><br>
+		<button type="button" id="checkoutsubmit" value="Submit">Check Out</button>
+		<br><br>
+		<div class="checkedoutresults" id="checkedoutresults">
+		</div>
+	<br>
+	</form>
+	<h2 id="checkin">Check in Books</h2>
+	<form class="checkin">
+	<table class="search">
+			<tr>
+				<td><label for="borrowername">Borrower First Name:</label></td>
+				<td><input type="text" name="borrowername" id="borrowername"></td>
+			</tr>
+			<tr>
+				<td><label for="checkinisbn">ISBN:</label></td>
+				<td><input type="text" name="checkinisbn" id="checkinisbn"></td>
+			</tr>
+			<tr>
+				<td><label for="borrowercardnoin">Borrower Card No.:</label></td>
+				<td><input type="text" name="borrowercardnoin" id="borrowercardnoin"></td>
+			</tr>
+		</table>
+		<br><br>
+		<button type="button" id="checkinsubmit" value="Submit">Check In</button>
+		<br><br>
+		<div class="checkedinresults" id="checkedinresults">
+		</div>
+	<br>
+	</form>
+	<h2 id="register">Borrower Registration:</h2>
+	<form class="borrower">
+		<table class="search">
+			<tr>
+				<td><label for="name">Full Name:</label></td>
+				<td><input type="text" name="name" id="name"></td>
+			</tr>
+			<tr>
+				<td><label for="ssn">SSN:</label></td>
+				<td><input type="text" name="ssn" id="ssn"></td>
+			</tr>
+			<tr>
+				<td><label for="email">E-mail:</label></td>
+				<td><input type="text" name="email" id="email"></td>
+			</tr>
+			<tr>
+				<td><label for="address">Address:</label></td>
+				<td><input type="text" name="address" id="address"></td>
+			</tr>
+			<tr>
+				<td><label for="phone">Phone:</label></td>
+				<td><input type="text" name="phone" id="phone"></td>
+			</tr>
+		</table>
+		<br><br>
+		<button type="button" id="registersubmit" value="Submit">Register Me!</button>
+		<br><br>
+	</form>
+	<h2 id="fines">Fines</h2>
+	<form class="fines">
+				<button type="button" id="finerefresh" value="Submit">Refresh the fines daily before any transaction</button><br><br>
+				<button type="button" id="borrowerfines" value="Submit">Display Borrowers with fines</button><br><br>
+	<!--</form>
+	<form class="finespay">
+				<label for="borrowercardnopayfines">Borrower Card No.:</label>
+				<input type="text" name="borrowercardnopayfines" id="borrowercardnopayfines"><br><br>
+			<button type="button" id="finepay" value="Submit">Pay my fines</button>-->
+			<div class="displayborrowerfines" id="displayborrowerfines">
+			</div>
+			<br><br>
+			<div class="payfinesresults" id="payfinesresults">
+			</div>
+			<br><br>
+	</form>
+	<div class="header">
+		<a class="imp" href="#top">Go Top</a>
+	</div>
+<script>
+	  $("#submit").click(function(){
+		var search = $('#search1').val();
+		$.ajax({
+  			type: "POST",
+  			url: "Db.php",
+  			data: {search : search},
+  			success: function(pictures) {
+  			$("#results").empty().append(pictures);
+  			}
+		});
+	  });
+	  
+	  $("#checkoutsubmit").click(function(){
+		var checkoutisbn = $('#checkoutisbn').val();
+		var borrowercardno = $('#borrowercardno').val();
+		$.ajax({
+  			type: "POST",
+  			url: "Checkout.php",
+  			data: {checkoutisbn : checkoutisbn,borrowercardno : borrowercardno},
+  			success: function(pictures) {
+  			if(pictures != null){
+  				$("#checkedoutresults").empty().append(pictures);
+  			}else {
+  				$("#checkedoutresults").append("<p>There are no books of this kind</p>");
+  			}
+  			}
+		});
+	  });
+	  $("#checkinsubmit").click(function(){
+		var borrowername = $('#borrowername').val();
+		var checkinisbn = $('#checkinisbn').val();
+		var borrowercardnoin = $('#borrowercardnoin').val();
+		$.ajax({
+  			type: "POST",
+  			url: "CheckIn.php",
+  			dataType : 'JSON',
+  			data: {borrowername : borrowername,checkinisbn : checkinisbn,borrowercardnoin : borrowercardnoin},
+  			success: function(pictures) {
+			if(pictures!=null){
+	  			var len = pictures.length;
+	  			$("#checkedinresults").append("<table><tr><th style='padding:0 35px 0 15px;'>  </th><th style='padding:0 30px 0 15px;'>ISBN:</th><th style='padding:0 30px 0 15px;'>Due Date:</th></tr>");
+	            for(var i=0; i<len; i++){
+	                var isbn = pictures[i].isbn;
+	                var duedate = pictures[i].duedate;
+	
+	                var tr_str = "<tr>" +
+	                	"<td style='padding:0 10px 0 15px;'><input type='checkbox' value="+isbn+" id="+isbn+" /></td>" +
+	                    "<td align='center' style='padding:0 5px 0 15px;'>" + isbn + "</td>" +
+	                    "<td align='center' style='padding:0 10px 0 15px;'>" + duedate + "</td>" +
+	                    "</tr>";
+	
+	                $("#checkedinresults").append(tr_str);
+	            }
+	           $("#checkedinresults").append("</table>");
+	           $("#checkedinresults").append("<button type='button' id='checksubmit' onclick='ongh()'>Check In these books</button>");
+  			}else{
+  				$("#checkedinresults").empty().append("<p>There are no books to check in</p>");
+  			}
+  			}
+		});
+	  });
+	  
+	  $("#registersubmit").click(function(){
+		var name = $('#name').val();
+		var ssn = $('#ssn').val();
+		var email = $('#email').val();
+		var address = $('#address').val(); 
+		var phone = $('#phone').val();
+		$.ajax({
+  			type: "POST",
+  			url: "Register.php",
+  			data: {name : name,ssn : ssn,email : email,address : address,phone : phone},
+  			success: function(pictures) {
+  				alert(pictures);//$("#registerresults").append(pictures);
+  			}
+		});
+	  });
+	  
+	  $("#finerefresh").click(function(){
+		$.ajax({
+  			type: "POST",
+  			url: "Fines.php",
+  			success: function(pictures) {
+  			alert(pictures);//$("#checkedoutresults").append(pictures);
+  			}
+		});
+	  }); 
+	  
+	   $("#borrowerfines").click(function(){
+	  var borrowercardnopf = $('#borrowercardnopayfines').val();
+		$.ajax({
+  			type: "POST",
+  			url: "BorrowersFinesDisplay.php",
+  			dataType : 'JSON',
+  			success: function(pictures) {
+	  			if(pictures!=null){
+		  			var len = pictures.length;
+		  			$("#displayborrowerfines").append("<table><tr><th style='padding:0 10px 0 15px;'>  </th><th style='padding:0 5px 0 15px;'>Card ID:  </th><th style='padding:0 5px 0 15px;'> Total Fine Amount:  </th><th style='padding:0 5px 0 15px;'> Paid fine:  </th><th style='padding:0 5px 0 15px;'> To be paid:  </th></tr>");
+		            for(var i=0; i<len; i++){
+		                var totalfineamount = pictures[i].total_fine_amount;
+						var cardid = pictures[i].cardid;
+						if(pictures[i].fineremain == null)
+							var fineremain = 0;
+						else
+							var fineremain = pictures[i].fineremain;
+						var finepaid = pictures[i].finepaid;
+		                var tr_str = "<tr>" +
+		                	"<td style='padding:0 20px 0 15px;'><input type='checkbox' value="+cardid+" id="+cardid+" />  </td>" +
+		                    "<td style='padding:0 75px 0 15px;' align='center'>"  + cardid +  "</td>" +
+		                    "<td style='padding:0 80px 0 15px;' align='center'>"  + totalfineamount +  "</td>" +
+		                    "<td style='padding:0 45px 0 15px;' align='center'>"  + finepaid +  "</td>" +
+		                    "<td style='padding:0 35px 0 15px;' align='center'>"  + fineremain +  "</td>" +
+		                    "</tr>";
+		
+		                $("#displayborrowerfines").append(tr_str);
+		            }
+		           $("#displayborrowerfines").append("</table>");
+		           $("#displayborrowerfines").append("<button type='button' id='finepay' onclick='payfine()'>Pay 'To be paid' fines</button>");
+	  			}else{
+	  				$("#displayborrowerfines").append("<p>There are no fines!</p>");
+	  			}
+  			}
+		});
+	  }); 
+	 
+	 function payfine(){
+   		$('#displayborrowerfines input').click(updatepayFines);
+   		updatepayFines();
+   		}
+	 
+	 function updatepayFines() {         
+    	var allValarrays = [];
+     	$('#displayborrowerfines :checked').each(function() {
+       		allValarrays.push($(this).val());
+     	});
+     	$.ajax({
+  			type: "POST",
+  			url: "FinesPay.php",
+  			dataType : 'JSON',
+  			data: {allValarrays : allValarrays},
+  			success: function(pictures) {
+	  			if(pictures!=null){
+		  			var len = pictures.length;
+		  			$("#payfinesresults").append("<table><tr><th style='padding:0 10px 0 15px;'>  </th><th style='padding:0 5px 0 15px;'>Card ID: </th><th style='padding:0 5px 0 15px;'>Loan ID: </th><th style='padding:0 5px 0 15px;'>Fine Amount:</th></tr>");
+		            for(var i=0; i<len; i++){
+		                var fineamount = pictures[i].fine_amount;
+						var loanid = pictures[i].loan_id;
+						var cardid = pictures[i].card_id;
+		                var tr_str = "<tr>" +
+		                	"<td style='padding:0 20px 0 15px;'><input type='checkbox' value="+loanid+" id="+loanid+" /></td>" +
+		                    "<td style='padding:0 60px 0 15px;' align='center'>" + cardid + "</td>" +
+		                    "<td style='padding:0 60px 0 15px;' align='center'>" + loanid + "</td>" +
+		                    "<td style='padding:0 35px 0 15px;' align='center'>" + fineamount + "</td>" +
+		                    "</tr>";
+		
+		                $("#payfinesresults").append(tr_str);
+		            }
+		           $("#payfinesresults").append("</table>");
+		           $("#payfinesresults").append("<button type='button' id='checksubmitfines' onclick='fine()'>Pay these selected fines</button>");
+	  			}else{
+	  				$("#payfinesresults").append("<p>There are no fines!</p>");
+	  			}
+  			}
+		});
+  		}
+	 
+	 function ongh(){
+   		$('#checkedinresults input').click(updateTextArea);
+   		updateTextArea();
+   		}
+	 
+	 function updateTextArea() {         
+    	var allVals = [];
+    	var borrowercardnoin1 = $('#borrowercardnoin').val();
+     	$('#checkedinresults :checked').each(function() {
+       		allVals.push($(this).val());
+     	});
+     	$.ajax({
+  			type: "POST",
+  			url: "CheckInBooks.php",
+  			data: {allVals:allVals ,borrowercardnoin1:borrowercardnoin1},
+  			success: function(pictures) {
+  			alert(pictures);//$("#checkedoutresults").append(pictures);
+  			}
+		});
+  		}
+ 	
+ 	function fine(){
+   		$('#payfinesresults input').click(updateFines);
+   		updateFines();
+   		}
+	 
+	 function updateFines() {         
+    	var allValarrays = [];
+     	$('#payfinesresults :checked').each(function() {
+       		allValarrays.push($(this).val());
+     	});
+     	$.ajax({
+  			type: "POST",
+  			url: "MyFinesPay.php",
+  			data: {allValarrays : allValarrays },
+  			success: function(paid) {
+  			alert(paid);//$("#checkedoutresults").append(pictures);
+  			}
+		});
+  		}
+</script>
+</body>
+</html>
